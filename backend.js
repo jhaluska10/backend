@@ -1,12 +1,18 @@
+
 const express = require('express');
 const app = express();
 const port = 5000;
+
+const cors = require('cors');
+app.use(cors());
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+
 const users = { 
     users_list :
     [
@@ -57,9 +63,11 @@ app.get('/users', (req, res) => {
         res.send(result);
     }
     else{
+        console.log(users);
         res.send(users);
     }
 });
+
 
 const findUserByName = (name) => { 
     return users['users_list'].filter( (user) => user['name'] === name); 
@@ -79,11 +87,26 @@ app.get('/users/:id', (req, res) => {
         res.send(result);
     }
 });
-POGGGYY
+
 
 function findUserById(id) {
     return users['users_list'].find( (user) => user['id'] === id); // or line below
     //return users['users_list'].filter( (user) => user['id'] === id);
+}
+
+function randId(user){
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
+    var numChar = '0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 3; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    var charactersLength = numChar.length;
+    for ( var i = 0; i < 3; i++ ) {
+        result += numChar.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    user.id = result;
 }
 
 app.delete('/users/:id', (req, res) => {
@@ -101,8 +124,9 @@ app.delete('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    randId(userToAdd);
     addUser(userToAdd);
-    res.status(200).end();
+    res.status(201).send(userToAdd);
 });
 
 function addUser(user){
