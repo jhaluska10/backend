@@ -118,7 +118,7 @@ app.delete('/users/:id', (req, res) => {
     else {
            users['users_list'].splice(result, 1); 
     }
-    res.send();
+    res.status(204).send();
 });
  
 
